@@ -3,9 +3,13 @@ package oidc
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -38,11 +42,17 @@ type Config struct {
 	// If this field is nonempty, only users from a listed domain will be allowed to log in
 	HostedDomains []string `json:"hostedDomains"`
 
-	// Override the value of email_verified to true in the returned claims
+	// Certificates for SSL validation
+	RootCAs []string `json:"rootCAs"`
+
+	// Override the value of email_verifed to true in the returned claims
 	InsecureSkipEmailVerified bool `json:"insecureSkipEmailVerified"`
 
 	// InsecureEnableGroups enables groups claims. This is disabled by default until https://github.com/dexidp/dex/issues/1065 is resolved
 	InsecureEnableGroups bool `json:"insecureEnableGroups"`
+
+	// Disable certificate verification
+	InsecureSkipVerify bool `json:"insecureSkipVerify"`
 
 	// GetUserInfo uses the userinfo endpoint to get additional claims for
 	// the token. This is especially useful where upstreams return "thin"
@@ -104,7 +114,13 @@ func knownBrokenAuthHeaderProvider(issuerURL string) bool {
 // Open returns a connector which can be used to login users through an upstream
 // OpenID Connect provider.
 func (c *Config) Open(id string, logger log.Logger) (conn connector.Connector, err error) {
+	httpClient, err := newHTTPClient(c.RootCAs, c.InsecureSkipVerify)
+	if err != nil {
+		return nil, err
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
+	ctx = context.WithValue(ctx, oauth2.HTTPClient, httpClient)
 
 	provider, err := oidc.NewProvider(ctx, c.Issuer)
 	if err != nil {
@@ -151,6 +167,7 @@ func (c *Config) Open(id string, logger log.Logger) (conn connector.Connector, e
 		),
 		logger:                    logger,
 		cancel:                    cancel,
+		httpClient:                httpClient,
 		hostedDomains:             c.HostedDomains,
 		insecureSkipEmailVerified: c.InsecureSkipEmailVerified,
 		insecureEnableGroups:      c.InsecureEnableGroups,
@@ -162,6 +179,40 @@ func (c *Config) Open(id string, logger log.Logger) (conn connector.Connector, e
 		preferredUsernameKey:      c.ClaimMapping.PreferredUsernameKey,
 		emailKey:                  c.ClaimMapping.EmailKey,
 		groupsKey:                 c.ClaimMapping.GroupsKey,
+	}, nil
+}
+
+func newHTTPClient(rootCAs []string, insecureSkipVerify bool) (*http.Client, error) {
+	pool, err := x509.SystemCertPool()
+	if err != nil {
+		return nil, err
+	}
+
+	tlsConfig := tls.Config{RootCAs: pool, InsecureSkipVerify: insecureSkipVerify}
+	for _, rootCA := range rootCAs {
+		rootCABytes, err := ioutil.ReadFile(rootCA)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read root-ca: %v", err)
+		}
+		if !tlsConfig.RootCAs.AppendCertsFromPEM(rootCABytes) {
+			return nil, fmt.Errorf("no certs found in root CA file %q", rootCA)
+		}
+	}
+
+	return &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tlsConfig,
+			Proxy:           http.ProxyFromEnvironment,
+			DialContext: (&net.Dialer{
+				Timeout:   30 * time.Second,
+				KeepAlive: 30 * time.Second,
+				DualStack: true,
+			}).DialContext,
+			MaxIdleConns:          100,
+			IdleConnTimeout:       90 * time.Second,
+			TLSHandshakeTimeout:   10 * time.Second,
+			ExpectContinueTimeout: 1 * time.Second,
+		},
 	}, nil
 }
 
@@ -177,6 +228,7 @@ type oidcConnector struct {
 	verifier                  *oidc.IDTokenVerifier
 	cancel                    context.CancelFunc
 	logger                    log.Logger
+	httpClient                *http.Client
 	hostedDomains             []string
 	insecureSkipEmailVerified bool
 	insecureEnableGroups      bool
@@ -232,7 +284,10 @@ func (c *oidcConnector) HandleCallback(s connector.Scopes, r *http.Request) (ide
 	if errType := q.Get("error"); errType != "" {
 		return identity, &oauth2Error{errType, q.Get("error_description")}
 	}
-	token, err := c.oauth2Config.Exchange(r.Context(), q.Get("code"))
+
+	ctx := context.WithValue(r.Context(), oauth2.HTTPClient, c.httpClient)
+
+	token, err := c.oauth2Config.Exchange(ctx, q.Get("code"))
 	if err != nil {
 		return identity, fmt.Errorf("oidc: failed to get token: %v", err)
 	}
@@ -265,6 +320,7 @@ func (c *oidcConnector) createIdentity(ctx context.Context, identity connector.I
 	if !ok {
 		return identity, errors.New("oidc: no id_token in token response")
 	}
+
 	idToken, err := c.verifier.Verify(ctx, rawIDToken)
 	if err != nil {
 		return identity, fmt.Errorf("oidc: failed to verify ID Token: %v", err)
