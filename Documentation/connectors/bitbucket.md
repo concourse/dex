@@ -26,5 +26,5 @@ connectors:
     redirectURI: http://127.0.0.1:5556/dex/callback
     # Optional teams, communicated through the "groups" scope.
     teams:
-    - name: my-team
+    - my-team
 ```

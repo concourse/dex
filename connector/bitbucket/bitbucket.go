@@ -1,4 +1,3 @@
-// organization -> team -> user | team -> group -> user
 // Package bitbucket provides authentication strategies using Bitbucket.
 package bitbucket
 
@@ -74,6 +73,10 @@ type bitbucketConnector struct {
 	logger       logrus.FieldLogger
 	// apiURL defaults to "https://api.bitbucket.org/2.0"
 	apiURL string
+
+	// the following are used only for tests
+	hostName   string
+	httpClient *http.Client
 }
 
 // groupsRequired returns whether dex requires Bitbucket's 'team' scope.
@@ -87,10 +90,18 @@ func (b *bitbucketConnector) oauth2Config(scopes connector.Scopes) *oauth2.Confi
 		bitbucketScopes = append(bitbucketScopes, scopeTeams)
 	}
 
+	endpoint := bitbucket.Endpoint
+	if b.hostName != "" {
+		endpoint = oauth2.Endpoint{
+			AuthURL:  "https://" + b.hostName + "/site/oauth2/authorize",
+			TokenURL: "https://" + b.hostName + "/site/oauth2/access_token",
+		}
+	}
+
 	return &oauth2.Config{
 		ClientID:     b.clientID,
 		ClientSecret: b.clientSecret,
-		Endpoint:     bitbucket.Endpoint,
+		Endpoint:     endpoint,
 		Scopes:       bitbucketScopes,
 	}
 }
@@ -124,6 +135,9 @@ func (b *bitbucketConnector) HandleCallback(s connector.Scopes, r *http.Request)
 	oauth2Config := b.oauth2Config(s)
 
 	ctx := r.Context()
+	if b.httpClient != nil {
+		ctx = context.WithValue(r.Context(), oauth2.HTTPClient, b.httpClient)
+	}
 
 	token, err := oauth2Config.Exchange(ctx, q.Get("code"))
 	if err != nil {
@@ -283,7 +297,7 @@ type user struct {
 // The HTTP client is expected to be constructed by the golang.org/x/oauth2 package,
 // which inserts a bearer token as part of the request.
 func (b *bitbucketConnector) user(ctx context.Context, client *http.Client) (user, error) {
-	// https://developer.atlassian.com/bitbucket/api/2/reference/resource/user/emails
+	// https://developer.atlassian.com/bitbucket/api/2/reference/resource/user
 	var (
 		u   user
 		err error
@@ -353,9 +367,8 @@ func (b *bitbucketConnector) getGroups(ctx context.Context, client *http.Client,
 		filteredTeams := filterTeams(bitbucketTeams, b.teams)
 		if len(filteredTeams) == 0 {
 			return nil, fmt.Errorf("bitbucket: user %q not in required teams", userLogin)
-		} else {
-			return filteredTeams, nil
 		}
+		return filteredTeams, nil
 	} else if groupScope {
 		return bitbucketTeams, nil
 	}
