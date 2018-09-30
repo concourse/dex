@@ -24,6 +24,7 @@ import (
 
 	"github.com/concourse/dex/connector"
 	"github.com/concourse/dex/connector/authproxy"
+	"github.com/concourse/dex/connector/bitbucket"
 	"github.com/concourse/dex/connector/cf"
 	"github.com/concourse/dex/connector/github"
 	"github.com/concourse/dex/connector/gitlab"
@@ -454,6 +455,7 @@ var ConnectorsConfig = map[string]func() ConnectorConfig{
 	"authproxy":    func() ConnectorConfig { return new(authproxy.Config) },
 	"linkedin":     func() ConnectorConfig { return new(linkedin.Config) },
 	"microsoft":    func() ConnectorConfig { return new(microsoft.Config) },
+	"bitbucket":    func() ConnectorConfig { return new(bitbucket.Config) },
 	// Keep around for backwards compatibility.
 	"samlExperimental": func() ConnectorConfig { return new(saml.Config) },
 }
