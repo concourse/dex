@@ -14,9 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreos/go-oidc"
 	"github.com/concourse/dex/connector"
 	"github.com/concourse/dex/pkg/log"
+	"github.com/coreos/go-oidc"
 	"golang.org/x/oauth2"
 )
 
@@ -48,6 +48,9 @@ type Config struct {
 
 	// Configurable key which contains the user name claims
 	UserNameKey string `json:"userNameKey"` // defaults to "username"
+
+	// Configurable key which contains the user id claims
+	UserIDKey string `json:"userIDKey"`
 
 	RootCAs            []string `json:"rootCAs"`
 	InsecureSkipVerify bool     `json:"insecureSkipVerify"`
@@ -141,6 +144,7 @@ func (c *Config) Open(id string, logger log.Logger) (conn connector.Connector, e
 		insecureSkipEmailVerified: c.InsecureSkipEmailVerified,
 		groupsKey:                 c.GroupsKey,
 		userNameKey:               c.UserNameKey,
+		userIDKey:                 c.UserIDKey,
 	}, nil
 }
 
@@ -195,6 +199,7 @@ type oidcConnector struct {
 	insecureSkipEmailVerified bool
 	groupsKey                 string
 	userNameKey               string
+	userIDKey                 string
 }
 
 func (c *oidcConnector) Close() error {
@@ -266,6 +271,12 @@ func (c *oidcConnector) HandleCallback(s connector.Scopes, r *http.Request) (ide
 		c.userNameKey = "username"
 	}
 
+	var userID string
+	if c.userIDKey != "" {
+		userID, _ = claimsMaps[c.userIDKey].(string)
+	} else {
+		userID = idToken.Subject
+	}
 	userName, _ := claimsMaps[c.userNameKey].(string)
 	name, _ := claimsMaps["name"].(string)
 	email, _ := claimsMaps["email"].(string)
@@ -291,7 +302,7 @@ func (c *oidcConnector) HandleCallback(s connector.Scopes, r *http.Request) (ide
 	}
 
 	identity = connector.Identity{
-		UserID:        idToken.Subject,
+		UserID:        userID,
 		Name:          name,
 		Username:      userName,
 		Email:         email,

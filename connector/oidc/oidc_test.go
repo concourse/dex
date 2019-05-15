@@ -27,7 +27,17 @@ func TestOpen(t *testing.T) {
 	testServer := testSetup(t)
 	defer testServer.Close()
 
-	conn := newConnector(t, testServer.URL)
+	serverURL := testServer.URL
+	testConfig := Config{
+		Issuer:       serverURL,
+		ClientID:     "testClient",
+		ClientSecret: "testSecret",
+		Scopes:       []string{"groups"},
+		RedirectURI:  serverURL + "/callback",
+		GroupsKey:    "groups_key",
+		UserNameKey:  "user_name_key",
+	}
+	conn := newConnector(t, testConfig)
 
 	sort.Strings(conn.oauth2Config.Scopes)
 
@@ -45,7 +55,17 @@ func TestLoginURL(t *testing.T) {
 	testServer := testSetup(t)
 	defer testServer.Close()
 
-	conn := newConnector(t, testServer.URL)
+	serverURL := testServer.URL
+	testConfig := Config{
+		Issuer:       serverURL,
+		ClientID:     "testClient",
+		ClientSecret: "testSecret",
+		Scopes:       []string{"groups"},
+		RedirectURI:  serverURL + "/callback",
+		GroupsKey:    "groups_key",
+		UserNameKey:  "user_name_key",
+	}
+	conn := newConnector(t, testConfig)
 
 	loginURL, err := conn.LoginURL(connector.Scopes{}, conn.redirectURI, "some-state")
 	expectEqual(t, err, nil)
@@ -68,7 +88,16 @@ func TestHandleCallBack(t *testing.T) {
 	testServer := testSetup(t)
 	defer testServer.Close()
 
-	conn := newConnector(t, testServer.URL)
+	serverURL := testServer.URL
+	testConfig := Config{
+		Issuer:       serverURL,
+		ClientID:     "testClient",
+		ClientSecret: "testSecret",
+		Scopes:       []string{"groups"},
+		RedirectURI:  serverURL + "/callback",
+		GroupsKey:    "groups_key",
+	}
+	conn := newConnector(t, testConfig)
 
 	req := newRequestWithAuthCode(t, testServer.URL, "some-code")
 
@@ -80,9 +109,42 @@ func TestHandleCallBack(t *testing.T) {
 	expectEqual(t, len(identity.Groups), 1)
 	expectEqual(t, identity.Groups[0], "test-group")
 	expectEqual(t, identity.Name, "test-name")
-	expectEqual(t, identity.Username, "test-username")
+	expectEqual(t, identity.Username, "test-default-username")
 	expectEqual(t, identity.Email, "test-email")
 	expectEqual(t, identity.EmailVerified, true)
+	expectEqual(t, identity.UserID, "test-subject")
+}
+
+func TestHandleCallBackWithUserIDKey(t *testing.T) {
+	testServer := testSetup(t)
+	defer testServer.Close()
+
+	serverURL := testServer.URL
+	testConfig := Config{
+		Issuer:       serverURL,
+		ClientID:     "testClient",
+		ClientSecret: "testSecret",
+		Scopes:       []string{"groups"},
+		RedirectURI:  serverURL + "/callback",
+		GroupsKey:    "groups_key",
+		UserIDKey:    "user_id_key",
+	}
+	conn := newConnector(t, testConfig)
+
+	req := newRequestWithAuthCode(t, testServer.URL, "some-code")
+
+	identity, err := conn.HandleCallback(connector.Scopes{Groups: true}, req)
+	if err != nil {
+		t.Fatal("handle callback failed", err)
+	}
+
+	expectEqual(t, len(identity.Groups), 1)
+	expectEqual(t, identity.Groups[0], "test-group")
+	expectEqual(t, identity.Name, "test-name")
+	expectEqual(t, identity.Username, "test-default-username")
+	expectEqual(t, identity.Email, "test-email")
+	expectEqual(t, identity.EmailVerified, true)
+	expectEqual(t, identity.UserID, "test-user-id")
 }
 
 func testSetup(t *testing.T) *httptest.Server {
@@ -116,12 +178,15 @@ func testSetup(t *testing.T) *httptest.Server {
 		url := fmt.Sprintf("http://%s", r.Host)
 
 		token, err := newToken(&jwk, map[string]interface{}{
+			"sub":            "test-subject",
 			"iss":            url,
 			"aud":            "testClient",
 			"exp":            time.Now().Add(time.Hour).Unix(),
 			"groups_key":     []string{"test-group"},
 			"name":           "test-name",
+			"username":       "test-default-username",
 			"user_name_key":  "test-username",
+			"user_id_key":    "test-user-id",
 			"email":          "test-email",
 			"email_verified": true,
 		})
@@ -171,17 +236,7 @@ func newToken(key *jose.JSONWebKey, claims map[string]interface{}) (string, erro
 	return signature.CompactSerialize()
 }
 
-func newConnector(t *testing.T, serverURL string) *oidcConnector {
-	testConfig := Config{
-		Issuer:       serverURL,
-		ClientID:     "testClient",
-		ClientSecret: "testSecret",
-		Scopes:       []string{"groups"},
-		RedirectURI:  serverURL + "/callback",
-		GroupsKey:    "groups_key",
-		UserNameKey:  "user_name_key",
-	}
-
+func newConnector(t *testing.T, testConfig Config) *oidcConnector {
 	log := logrus.New()
 
 	conn, err := testConfig.Open("id", log)
