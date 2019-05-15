@@ -115,6 +115,38 @@ func TestHandleCallBack(t *testing.T) {
 	expectEqual(t, identity.UserID, "test-subject")
 }
 
+func TestHandleCallBackWithUserNameKey(t *testing.T) {
+	testServer := testSetup(t)
+	defer testServer.Close()
+
+	serverURL := testServer.URL
+	testConfig := Config{
+		Issuer:       serverURL,
+		ClientID:     "testClient",
+		ClientSecret: "testSecret",
+		Scopes:       []string{"groups"},
+		RedirectURI:  serverURL + "/callback",
+		GroupsKey:    "groups_key",
+		UserNameKey:  "user_name_key",
+	}
+	conn := newConnector(t, testConfig)
+
+	req := newRequestWithAuthCode(t, testServer.URL, "some-code")
+
+	identity, err := conn.HandleCallback(connector.Scopes{Groups: true}, req)
+	if err != nil {
+		t.Fatal("handle callback failed", err)
+	}
+
+	expectEqual(t, len(identity.Groups), 1)
+	expectEqual(t, identity.Groups[0], "test-group")
+	expectEqual(t, identity.Name, "test-name")
+	expectEqual(t, identity.Username, "test-username")
+	expectEqual(t, identity.Email, "test-email")
+	expectEqual(t, identity.EmailVerified, true)
+	expectEqual(t, identity.UserID, "test-subject")
+}
+
 func TestHandleCallBackWithUserIDKey(t *testing.T) {
 	testServer := testSetup(t)
 	defer testServer.Close()
