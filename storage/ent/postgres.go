@@ -16,10 +16,10 @@ import (
 	// Register postgres driver.
 	_ "github.com/lib/pq"
 
-	"github.com/dexidp/dex/pkg/log"
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/ent/client"
-	"github.com/dexidp/dex/storage/ent/db"
+	"github.com/concourse/dex/pkg/log"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/ent/client"
+	"github.com/concourse/dex/storage/ent/db"
 )
 
 // nolint
