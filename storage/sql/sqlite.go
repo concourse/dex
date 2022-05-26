@@ -8,8 +8,8 @@ import (
 
 	sqlite3 "github.com/mattn/go-sqlite3"
 
-	"github.com/dexidp/dex/pkg/log"
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/pkg/log"
+	"github.com/concourse/dex/storage"
 )
 
 // SQLite3 options for creating an SQL db.
