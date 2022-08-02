@@ -5,9 +5,9 @@ package enttest
 import (
 	"context"
 
-	"github.com/dexidp/dex/storage/ent/db"
+	"github.com/concourse/dex/storage/ent/db"
 	// required by schema hooks.
-	_ "github.com/dexidp/dex/storage/ent/db/runtime"
+	_ "github.com/concourse/dex/storage/ent/db/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
 )
