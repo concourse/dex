@@ -1760,7 +1760,7 @@ func TestServerSupportedGrants(t *testing.T) {
 		{
 			name:      "Simple",
 			config:    func(c *Config) {},
-			resGrants: []string{grantTypeAuthorizationCode, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange},
+			resGrants: []string{grantTypeAuthorizationCode, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange, grantTypeClientCredentials},
 		},
 		{
 			name:      "Minimal",
@@ -1770,12 +1770,12 @@ func TestServerSupportedGrants(t *testing.T) {
 		{
 			name:      "With password connector",
 			config:    func(c *Config) { c.PasswordConnector = "local" },
-			resGrants: []string{grantTypeAuthorizationCode, grantTypePassword, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange},
+			resGrants: []string{grantTypeAuthorizationCode, grantTypePassword, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange, grantTypeClientCredentials},
 		},
 		{
 			name:      "With token response",
 			config:    func(c *Config) { c.SupportedResponseTypes = append(c.SupportedResponseTypes, responseTypeToken) },
-			resGrants: []string{grantTypeAuthorizationCode, grantTypeImplicit, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange},
+			resGrants: []string{grantTypeAuthorizationCode, grantTypeImplicit, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange, grantTypeClientCredentials},
 		},
 		{
 			name: "All",
@@ -1783,7 +1783,7 @@ func TestServerSupportedGrants(t *testing.T) {
 				c.PasswordConnector = "local"
 				c.SupportedResponseTypes = append(c.SupportedResponseTypes, responseTypeToken)
 			},
-			resGrants: []string{grantTypeAuthorizationCode, grantTypeImplicit, grantTypePassword, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange},
+			resGrants: []string{grantTypeAuthorizationCode, grantTypeImplicit, grantTypePassword, grantTypeRefreshToken, grantTypeDeviceCode, grantTypeTokenExchange, grantTypeClientCredentials},
 		},
 	}
 
