@@ -15,9 +15,9 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
 
-	"github.com/dexidp/dex/connector"
-	pkg_groups "github.com/dexidp/dex/pkg/groups"
-	"github.com/dexidp/dex/pkg/log"
+	"github.com/concourse/dex/connector"
+	pkg_groups "github.com/concourse/dex/pkg/groups"
+	"github.com/concourse/dex/pkg/log"
 )
 
 const (
