@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/authcode"
+	"github.com/concourse/dex/storage/ent/db/authcode"
 )
 
 // AuthCodeCreate is the builder for creating a AuthCode entity.

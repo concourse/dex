@@ -1,4 +1,4 @@
-module github.com/dexidp/dex/examples
+module github.com/concourse/dex/examples
 
 go 1.17
 
