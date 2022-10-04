@@ -12,8 +12,8 @@ import (
 
 	"gopkg.in/square/go-jose.v2"
 
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/memory"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/memory"
 )
 
 func TestParseAuthorizationRequest(t *testing.T) {

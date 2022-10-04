@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"gopkg.in/square/go-jose.v2"
 
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/storage"
 )
 
 /* Original SQL table:
