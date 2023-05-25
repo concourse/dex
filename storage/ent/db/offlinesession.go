@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/dexidp/dex/storage/ent/db/offlinesession"
+	"github.com/concourse/dex/storage/ent/db/offlinesession"
 )
 
 // OfflineSession is the model entity for the OfflineSession schema.

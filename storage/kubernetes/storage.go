@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dexidp/dex/pkg/log"
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/kubernetes/k8sapi"
+	"github.com/concourse/dex/pkg/log"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/kubernetes/k8sapi"
 )
 
 const (

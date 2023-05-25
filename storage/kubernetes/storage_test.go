@@ -17,8 +17,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/conformance"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/conformance"
 )
 
 const kubeconfigPathVariableName = "DEX_KUBERNETES_CONFIG_PATH"

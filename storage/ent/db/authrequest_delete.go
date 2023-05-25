@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/authrequest"
-	"github.com/dexidp/dex/storage/ent/db/predicate"
+	"github.com/concourse/dex/storage/ent/db/authrequest"
+	"github.com/concourse/dex/storage/ent/db/predicate"
 )
 
 // AuthRequestDelete is the builder for deleting a AuthRequest entity.
