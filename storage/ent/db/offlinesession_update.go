@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/offlinesession"
-	"github.com/dexidp/dex/storage/ent/db/predicate"
+	"github.com/concourse/dex/storage/ent/db/offlinesession"
+	"github.com/concourse/dex/storage/ent/db/predicate"
 )
 
 // OfflineSessionUpdate is the builder for updating OfflineSession entities.

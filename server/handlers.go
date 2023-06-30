@@ -21,9 +21,9 @@ import (
 	"github.com/go-jose/go-jose/v4"
 	"github.com/gorilla/mux"
 
-	"github.com/dexidp/dex/connector"
-	"github.com/dexidp/dex/server/internal"
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/connector"
+	"github.com/concourse/dex/server/internal"
+	"github.com/concourse/dex/storage"
 )
 
 const (
@@ -1125,14 +1125,14 @@ func (s *Server) handleClientCredentialsGrant(w http.ResponseWriter, r *http.Req
 
 	claims := storage.Claims{UserID: client.ID}
 
-	accessToken, err := s.newAccessToken(client.ID, claims, scopes, nonce, "client")
+	accessToken, _, err := s.newAccessToken(r.Context(), client.ID, claims, scopes, nonce, "client")
 	if err != nil {
-		s.logger.Errorf("failed to create new access token: %v", err)
+		s.logger.ErrorContext(r.Context(), "failed to create new access token", "err", err)
 		s.tokenErrHelper(w, errServerError, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	idToken, expiry, err := s.newIDToken(client.ID, claims, scopes, nonce, accessToken, "", "client")
+	idToken, expiry, err := s.newIDToken(r.Context(), client.ID, claims, scopes, nonce, accessToken, "", "client")
 	if err != nil {
 		s.tokenErrHelper(w, errServerError, fmt.Sprintf("failed to create ID token: %v", err), http.StatusInternalServerError)
 		return

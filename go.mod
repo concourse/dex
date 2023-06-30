@@ -1,4 +1,4 @@
-module github.com/dexidp/dex
+module github.com/concourse/dex
 
 go 1.21
 

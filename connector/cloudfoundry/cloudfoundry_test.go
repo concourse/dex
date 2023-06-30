@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/sirupsen/logrus"
-
-	"github.com/dexidp/dex/connector"
+	"github.com/concourse/dex/connector"
 )
 
 func TestOpen(t *testing.T) {
@@ -231,7 +231,7 @@ func newConnector(t *testing.T, serverURL string) *cloudfoundryConnector {
 		InsecureSkipVerify: true,
 	}
 
-	log := logrus.New()
+	log := slog.New(slog.NewTextHandler(io.Discard, &slog.HandlerOptions{}))
 
 	conn, err := testConfig.Open("id", log)
 	if err != nil {

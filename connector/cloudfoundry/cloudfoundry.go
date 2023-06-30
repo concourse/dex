@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net"
 	"net/http"
 	"os"
@@ -16,8 +17,7 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/dexidp/dex/connector"
-	"github.com/dexidp/dex/pkg/log"
+	"github.com/concourse/dex/connector"
 )
 
 type cloudfoundryConnector struct {
@@ -29,7 +29,7 @@ type cloudfoundryConnector struct {
 	authorizationURL string
 	userInfoURL      string
 	httpClient       *http.Client
-	logger           log.Logger
+	logger           *slog.Logger
 }
 
 type connectorData struct {
@@ -77,7 +77,7 @@ type org struct {
 	GUID string
 }
 
-func (c *Config) Open(id string, logger log.Logger) (connector.Connector, error) {
+func (c *Config) Open(id string, logger *slog.Logger) (connector.Connector, error) {
 	var err error
 
 	cloudfoundryConn := &cloudfoundryConnector{
@@ -85,7 +85,7 @@ func (c *Config) Open(id string, logger log.Logger) (connector.Connector, error)
 		clientSecret: c.ClientSecret,
 		apiURL:       c.APIURL,
 		redirectURI:  c.RedirectURI,
-		logger:       logger,
+		logger:       logger.With(slog.Group("connector", "type", "cloudfoundry", "id", id)),
 	}
 
 	cloudfoundryConn.httpClient, err = newHTTPClient(c.RootCAs, c.InsecureSkipVerify)
@@ -96,16 +96,14 @@ func (c *Config) Open(id string, logger log.Logger) (connector.Connector, error)
 	apiURL := strings.TrimRight(c.APIURL, "/")
 	apiResp, err := cloudfoundryConn.httpClient.Get(fmt.Sprintf("%s/v2/info", apiURL))
 	if err != nil {
-		logger.Errorf("failed-to-send-request-to-cloud-controller-api", err)
-		return nil, err
+		return nil, fmt.Errorf("failed-to-send-request-to-cloud-controller-api: %w", err)
 	}
 
 	defer apiResp.Body.Close()
 
 	if apiResp.StatusCode != http.StatusOK {
 		err = fmt.Errorf("request failed with status %d", apiResp.StatusCode)
-		logger.Errorf("failed-get-info-response-from-api", err)
-		return nil, err
+		return nil, fmt.Errorf("failed-get-info-response-from-api: %w", err)
 	}
 
 	var apiResult map[string]interface{}
@@ -114,14 +112,12 @@ func (c *Config) Open(id string, logger log.Logger) (connector.Connector, error)
 	uaaURL := strings.TrimRight(apiResult["authorization_endpoint"].(string), "/")
 	uaaResp, err := cloudfoundryConn.httpClient.Get(fmt.Sprintf("%s/.well-known/openid-configuration", uaaURL))
 	if err != nil {
-		logger.Errorf("failed-to-send-request-to-uaa-api", err)
-		return nil, err
+		return nil, fmt.Errorf("failed-to-send-request-to-uaa-api: %w", err)
 	}
 
 	if apiResp.StatusCode != http.StatusOK {
 		err = fmt.Errorf("request failed with status %d", apiResp.StatusCode)
-		logger.Errorf("failed-to-get-well-known-config-response-from-api", err)
-		return nil, err
+		return nil, fmt.Errorf("failed-to-get-well-known-config-response-from-api: %w", err)
 	}
 
 	defer uaaResp.Body.Close()
@@ -130,8 +126,7 @@ func (c *Config) Open(id string, logger log.Logger) (connector.Connector, error)
 	err = json.NewDecoder(uaaResp.Body).Decode(&uaaResult)
 
 	if err != nil {
-		logger.Errorf("failed-to-decode-response-from-uaa-api", err)
-		return nil, err
+		return nil, fmt.Errorf("failed-to-decode-response-from-uaa-api: %w", err)
 	}
 
 	cloudfoundryConn.tokenURL, _ = uaaResult["token_endpoint"].(string)
