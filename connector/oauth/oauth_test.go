@@ -16,7 +16,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	jose "gopkg.in/square/go-jose.v2"
 
-	"github.com/dexidp/dex/connector"
+	"github.com/concourse/dex/connector"
 )
 
 func TestOpen(t *testing.T) {

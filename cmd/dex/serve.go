@@ -35,9 +35,9 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/dexidp/dex/api/v2"
-	"github.com/dexidp/dex/pkg/log"
-	"github.com/dexidp/dex/server"
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/pkg/log"
+	"github.com/concourse/dex/server"
+	"github.com/concourse/dex/storage"
 )
 
 type serveOptions struct {

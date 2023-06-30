@@ -6,13 +6,13 @@ import (
 	"hash"
 	"time"
 
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/ent/db"
-	"github.com/dexidp/dex/storage/ent/db/authcode"
-	"github.com/dexidp/dex/storage/ent/db/authrequest"
-	"github.com/dexidp/dex/storage/ent/db/devicerequest"
-	"github.com/dexidp/dex/storage/ent/db/devicetoken"
-	"github.com/dexidp/dex/storage/ent/db/migrate"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/ent/db"
+	"github.com/concourse/dex/storage/ent/db/authcode"
+	"github.com/concourse/dex/storage/ent/db/authrequest"
+	"github.com/concourse/dex/storage/ent/db/devicerequest"
+	"github.com/concourse/dex/storage/ent/db/devicetoken"
+	"github.com/concourse/dex/storage/ent/db/migrate"
 )
 
 var _ storage.Storage = (*Database)(nil)

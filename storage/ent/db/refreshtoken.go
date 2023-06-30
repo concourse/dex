@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dexidp/dex/storage/ent/db/refreshtoken"
+	"github.com/concourse/dex/storage/ent/db/refreshtoken"
 )
 
 // RefreshToken is the model entity for the RefreshToken schema.

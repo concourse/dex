@@ -12,10 +12,10 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/dexidp/dex/api/v2"
-	"github.com/dexidp/dex/pkg/log"
-	"github.com/dexidp/dex/server/internal"
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/memory"
+	"github.com/concourse/dex/pkg/log"
+	"github.com/concourse/dex/server/internal"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/memory"
 )
 
 // apiClient is a test gRPC client. When constructed, it runs a server in
