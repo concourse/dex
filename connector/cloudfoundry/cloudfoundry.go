@@ -94,7 +94,7 @@ func (c *Config) Open(id string, logger *slog.Logger) (connector.Connector, erro
 	}
 
 	apiURL := strings.TrimRight(c.APIURL, "/")
-	apiResp, err := cloudfoundryConn.httpClient.Get(fmt.Sprintf("%s/v2/info", apiURL))
+	apiResp, err := cloudfoundryConn.httpClient.Get(fmt.Sprintf("%s/v3/info", apiURL))
 	if err != nil {
 		return nil, fmt.Errorf("failed-to-send-request-to-cloud-controller-api: %w", err)
 	}
