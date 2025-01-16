@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/predicate"
-	"github.com/dexidp/dex/storage/ent/db/refreshtoken"
+	"github.com/concourse/dex/storage/ent/db/predicate"
+	"github.com/concourse/dex/storage/ent/db/refreshtoken"
 )
 
 // RefreshTokenQuery is the builder for querying RefreshToken entities.

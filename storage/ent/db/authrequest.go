@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dexidp/dex/storage/ent/db/authrequest"
+	"github.com/concourse/dex/storage/ent/db/authrequest"
 )
 
 // AuthRequest is the model entity for the AuthRequest schema.

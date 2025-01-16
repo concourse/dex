@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"testing"
 
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/conformance"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/conformance"
 )
 
 func TestStorage(t *testing.T) {
