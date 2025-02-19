@@ -9,7 +9,7 @@ import (
 
 	"github.com/coreos/go-oidc/v3/oidc"
 
-	"github.com/dexidp/dex/server/internal"
+	"github.com/concourse/dex/server/internal"
 )
 
 // Introspection contains an access token's session data as specified by

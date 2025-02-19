@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dexidp/dex/server"
+	"github.com/concourse/dex/server"
 )
 
 var logFormats = []string{"json", "text"}

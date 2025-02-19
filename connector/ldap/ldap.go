@@ -15,7 +15,7 @@ import (
 
 	"github.com/go-ldap/ldap/v3"
 
-	"github.com/dexidp/dex/connector"
+	"github.com/concourse/dex/connector"
 )
 
 // Config holds the configuration parameters for the LDAP connector. The LDAP

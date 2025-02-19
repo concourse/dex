@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/dexidp/dex/pkg/httpclient"
+	"github.com/concourse/dex/pkg/httpclient"
 )
 
 func TestRootCAs(t *testing.T) {

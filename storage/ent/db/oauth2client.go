@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dexidp/dex/storage/ent/db/oauth2client"
+	"github.com/concourse/dex/storage/ent/db/oauth2client"
 )
 
 // OAuth2Client is the model entity for the OAuth2Client schema.
