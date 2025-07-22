@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function abort() {
   echo $'\e[31m'"$@"$'\e[0m' >&2

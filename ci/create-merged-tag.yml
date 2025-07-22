@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: registry-image
-  source: {repository: concourse/unit}
+  source: {repository: cgr.dev/chainguard/wolfi-base}
 
 inputs:
   - name: dex
@@ -14,4 +14,16 @@ params:
   CONCOURSE_DEX_DEPLOY_KEY:
 
 run:
-  path: dex/ci/scripts/create-merged-tag
+  path: sh
+  args:
+    - -c
+    - |
+      apk add --quiet --no-progress \
+      bash \
+      cmd:git \
+      cmd:xargs \
+      cmd:ssh-keyscan\
+      cmd:grep \
+      cmd:sed
+
+      ./dex/ci/scripts/create-merged-tag

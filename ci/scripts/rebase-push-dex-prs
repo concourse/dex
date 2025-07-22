@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/use/bin/env bash
 
-set -e -x
-
-set -o pipefail
+set -euo pipefail
+set -x
 
 upstream_release_tag=v$(cat dex-github-release/version)
 

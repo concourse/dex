@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: registry-image
-  source: {repository: concourse/unit}
+  source: {repository: cgr.dev/chainguard/wolfi-base}
 
 inputs:
   - name: concourse
@@ -13,4 +13,16 @@ params:
   GITHUB_TOKEN:
 
 run:
-  path: concourse-dex/ci/scripts/update-concourse-dex-module
+  path: sh
+  args:
+    - -c
+    - |
+      apk add --quiet --no-progress \
+      bash \
+      cmd:git \
+      cmd:xargs \
+      cmd:ssh-keyscan\
+      cmd:grep \
+      cmd:sed
+
+      ./concourse-dex/ci/scripts/update-concourse-dex-module

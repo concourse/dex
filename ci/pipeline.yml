@@ -1,8 +1,3 @@
-resource_types:
-- name: slack-notifier
-  type: registry-image
-  source: {repository: mockersf/concourse-slack-notifier}
-
 resources:
 - name: dex-github-release
   type: github-release
@@ -38,17 +33,9 @@ resources:
     file: version
     private_key: ((concourse_dex_deploy_key))
 
-- name: notify
-  type: slack-notifier
-  icon: slack
-  source:
-    url: ((slack_hooks.concourse-interrupt))
-    username: ((basic_auth.username))
-    password: ((basic_auth.password))
-    concourse_url: https://ci.concourse-ci.org
-
 jobs:
-- name: update-prs
+- name: rebase-prs
+  old_name: update-prs
   plan:
   - in_parallel:
       - get: dex-github-release
@@ -69,8 +56,3 @@ jobs:
       dex: concourse-dex
   - put: fork-version
     params: {bump: minor}
-  on_failure: &failed-dex
-    put: notify
-    params:
-      mode: normal
-      alert_type: failed
