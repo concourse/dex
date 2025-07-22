@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/storage"
 )
 
 // CreateConnector saves a connector into the database.

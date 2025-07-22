@@ -16,9 +16,9 @@ import (
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
 
-	"github.com/dexidp/dex/connector"
-	groups_pkg "github.com/dexidp/dex/pkg/groups"
-	"github.com/dexidp/dex/pkg/httpclient"
+	"github.com/concourse/dex/connector"
+	groups_pkg "github.com/concourse/dex/pkg/groups"
+	"github.com/concourse/dex/pkg/httpclient"
 )
 
 // Config holds configuration options for OpenID Connect logins.

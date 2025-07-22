@@ -23,9 +23,9 @@ import (
 
 	"github.com/go-jose/go-jose/v4"
 
-	"github.com/dexidp/dex/connector"
-	"github.com/dexidp/dex/server/internal"
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/connector"
+	"github.com/concourse/dex/server/internal"
+	"github.com/concourse/dex/storage"
 )
 
 // TODO(ericchiang): clean this file up and figure out more idiomatic error handling.

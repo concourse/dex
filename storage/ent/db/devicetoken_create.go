@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/devicetoken"
+	"github.com/concourse/dex/storage/ent/db/devicetoken"
 )
 
 // DeviceTokenCreate is the builder for creating a DeviceToken entity.

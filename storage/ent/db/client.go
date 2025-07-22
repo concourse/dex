@@ -9,21 +9,21 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/dexidp/dex/storage/ent/db/migrate"
+	"github.com/concourse/dex/storage/ent/db/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dexidp/dex/storage/ent/db/authcode"
-	"github.com/dexidp/dex/storage/ent/db/authrequest"
-	"github.com/dexidp/dex/storage/ent/db/connector"
-	"github.com/dexidp/dex/storage/ent/db/devicerequest"
-	"github.com/dexidp/dex/storage/ent/db/devicetoken"
-	"github.com/dexidp/dex/storage/ent/db/keys"
-	"github.com/dexidp/dex/storage/ent/db/oauth2client"
-	"github.com/dexidp/dex/storage/ent/db/offlinesession"
-	"github.com/dexidp/dex/storage/ent/db/password"
-	"github.com/dexidp/dex/storage/ent/db/refreshtoken"
+	"github.com/concourse/dex/storage/ent/db/authcode"
+	"github.com/concourse/dex/storage/ent/db/authrequest"
+	"github.com/concourse/dex/storage/ent/db/connector"
+	"github.com/concourse/dex/storage/ent/db/devicerequest"
+	"github.com/concourse/dex/storage/ent/db/devicetoken"
+	"github.com/concourse/dex/storage/ent/db/keys"
+	"github.com/concourse/dex/storage/ent/db/oauth2client"
+	"github.com/concourse/dex/storage/ent/db/offlinesession"
+	"github.com/concourse/dex/storage/ent/db/password"
+	"github.com/concourse/dex/storage/ent/db/refreshtoken"
 )
 
 // Client is the client that holds all ent builders.

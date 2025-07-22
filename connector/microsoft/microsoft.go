@@ -16,8 +16,8 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/dexidp/dex/connector"
-	groups_pkg "github.com/dexidp/dex/pkg/groups"
+	"github.com/concourse/dex/connector"
+	groups_pkg "github.com/concourse/dex/pkg/groups"
 )
 
 // GroupNameFormat represents the format of the group identifier

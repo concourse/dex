@@ -3,8 +3,8 @@ package client
 import (
 	"context"
 
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/ent/db/devicetoken"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/ent/db/devicetoken"
 )
 
 // CreateDeviceToken saves provided token into the database.

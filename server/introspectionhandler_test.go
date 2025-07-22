@@ -15,8 +15,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/dexidp/dex/server/internal"
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/server/internal"
+	"github.com/concourse/dex/storage"
 )
 
 func toJSON(a interface{}) string {

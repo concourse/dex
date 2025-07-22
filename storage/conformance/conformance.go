@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/storage"
 )
 
 // ensure that values being tested on never expire.
