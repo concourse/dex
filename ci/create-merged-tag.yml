@@ -22,7 +22,7 @@ run:
       bash \
       cmd:git \
       cmd:xargs \
-      cmd:ssh-keyscan\
+      cmd:ssh-keyscan \
       cmd:grep \
       cmd:sed
 
