@@ -21,6 +21,7 @@ run:
       bash \
       cmd:git \
       cmd:xargs \
+      cmd:ssh \
       cmd:ssh-keyscan \
       cmd:grep \
       cmd:sed
