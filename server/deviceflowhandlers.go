@@ -13,7 +13,7 @@ import (
 
 	"golang.org/x/net/html"
 
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/storage"
 )
 
 type deviceCodeResponse struct {

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/connector"
+	"github.com/concourse/dex/storage/ent/db/connector"
 )
 
 // ConnectorCreate is the builder for creating a Connector entity.
