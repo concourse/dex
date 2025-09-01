@@ -29,7 +29,7 @@ require (
 	github.com/prometheus/client_golang v1.22.0
 	github.com/russellhaering/goxmldsig v1.5.0
 	github.com/spf13/cobra v1.9.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	go.etcd.io/etcd/client/pkg/v3 v3.6.0
 	go.etcd.io/etcd/client/v3 v3.6.0
 	golang.org/x/crypto v0.38.0
