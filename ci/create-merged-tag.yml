@@ -25,6 +25,7 @@ run:
       cmd:ssh-keyscan \
       cmd:grep \
       cmd:sed \
-      cmd:make
+      cmd:make \
+      curl
 
       ./dex/ci/scripts/create-merged-tag
