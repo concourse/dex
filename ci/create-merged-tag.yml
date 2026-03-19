@@ -26,6 +26,7 @@ run:
       cmd:grep \
       cmd:sed \
       cmd:make \
-      curl
+      curl \
+      go
 
       ./dex/ci/scripts/create-merged-tag
