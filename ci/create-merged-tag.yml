@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: registry-image
-  source: {repository: concourse/unit}
+  source: {repository: concourse/bash}
 
 inputs:
   - name: dex
@@ -19,7 +19,6 @@ run:
     - -c
     - |
       apk add --quiet --no-progress \
-      bash \
       cmd:git \
       cmd:xargs \
       cmd:ssh \
