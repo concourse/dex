@@ -9,12 +9,12 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/kylelemons/godebug/pretty"
 
-	"github.com/dexidp/dex/connector/mock"
-	"github.com/dexidp/dex/connector/oidc"
-	"github.com/dexidp/dex/server"
-	"github.com/dexidp/dex/server/signer"
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/sql"
+	"github.com/concourse/dex/connector/mock"
+	"github.com/concourse/dex/connector/oidc"
+	"github.com/concourse/dex/server"
+	"github.com/concourse/dex/server/signer"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/sql"
 )
 
 var _ = yaml.YAMLToJSON

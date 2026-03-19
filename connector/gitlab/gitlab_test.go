@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dexidp/dex/connector"
+	"github.com/concourse/dex/connector"
 )
 
 func readValidRootCAData(t *testing.T) []byte {

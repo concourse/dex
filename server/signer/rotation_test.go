@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/memory"
+	"github.com/concourse/dex/storage"
+	"github.com/concourse/dex/storage/memory"
 )
 
 func signingKeyID(t *testing.T, s storage.Storage) string {
