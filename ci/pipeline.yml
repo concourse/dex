@@ -68,4 +68,5 @@ jobs:
     input_mapping:
       dex: concourse-dex
   - put: fork-version
+    no_get: true
     params: {bump: minor}
