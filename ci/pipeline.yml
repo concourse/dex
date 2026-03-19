@@ -33,6 +33,16 @@ resources:
     file: version
     private_key: ((concourse_dex_deploy_key))
 
+  - name: unit-image
+    type: registry-image
+    icon: docker
+    source:
+      repository: concourse/unit
+      tag: latest
+      username: ((docker.username))
+      password: ((docker.password))
+
+
 jobs:
 - name: rebase-prs
   old_name: update-prs
@@ -44,11 +54,14 @@ jobs:
       - get: concourse
       - get: concourse-dex-version
         resource: fork-version
+      - get: unit-image
   - task: rebase-and-push
+    image: unit-image
     file: concourse-dex/ci/rebase-and-push-dex-prs.yml
     params:
       CONCOURSE_DEX_DEPLOY_KEY: ((concourse_dex_deploy_key))
   - task: create-merged-tag
+    image: unit-image
     file: concourse-dex/ci/create-merged-tag.yml
     params:
       CONCOURSE_DEX_DEPLOY_KEY: ((concourse_dex_deploy_key))
