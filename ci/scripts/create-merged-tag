@@ -35,6 +35,7 @@ progress "removing github config"
 rm -rf .github/dependabot.yml .github/workflows
 
 # making sure all tests are passed
+export CGO_ENABLED=1
 make testall
 
 cat > ./release-note <<EOF
