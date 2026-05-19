@@ -30,9 +30,11 @@ grep -r -l --include="*.mod" "github.com/dexidp/dex" . | xargs sed -i -e 's|gith
 progress "rewriting module name"
 grep -r -l '--include=*.'{go,mod} "github.com/concourse/dex/api/v2" . | xargs sed -i -e 's|github.com/concourse/dex/api/v2|github.com/dexidp/dex/api/v2|g'
 
-# disable dependabot notifications and GitHub Actions for our fork
+# disable dependabot notifications for our fork and other Github features for the project
 progress "removing github config"
-rm -rf .github/dependabot.yml .github/workflows
+rm -rf .github/
+git add .github/
+git commit -m "Remove .github folder from fork"
 
 # making sure all tests are passed
 export CGO_ENABLED=1
