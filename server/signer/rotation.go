@@ -13,7 +13,7 @@ import (
 
 	"github.com/go-jose/go-jose/v4"
 
-	"github.com/dexidp/dex/storage"
+	"github.com/concourse/dex/storage"
 )
 
 var errAlreadyRotated = errors.New("keys already rotated by another server instance")

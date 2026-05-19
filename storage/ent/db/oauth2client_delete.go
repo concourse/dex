@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dexidp/dex/storage/ent/db/oauth2client"
-	"github.com/dexidp/dex/storage/ent/db/predicate"
+	"github.com/concourse/dex/storage/ent/db/oauth2client"
+	"github.com/concourse/dex/storage/ent/db/predicate"
 )
 
 // OAuth2ClientDelete is the builder for deleting a OAuth2Client entity.

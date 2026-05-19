@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dexidp/dex/storage/ent/db/authcode"
+	"github.com/concourse/dex/storage/ent/db/authcode"
 )
 
 // AuthCode is the model entity for the AuthCode schema.

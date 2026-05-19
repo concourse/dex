@@ -20,8 +20,8 @@ import (
 	"google.golang.org/api/impersonate"
 	"google.golang.org/api/option"
 
-	"github.com/dexidp/dex/connector"
-	pkg_groups "github.com/dexidp/dex/pkg/groups"
+	"github.com/concourse/dex/connector"
+	pkg_groups "github.com/concourse/dex/pkg/groups"
 )
 
 const (
